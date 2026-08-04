@@ -1,0 +1,7 @@
+# nooit committen: bevat wachtwoord en API-token
+.env
+
+# Node-RED slaat hier ook interne runtime-bestanden op (sessies, cache, geïnstalleerde
+# node-modules) -- we willen enkel onze eigen flow (flows.json) bijhouden in Git
+node-red/data/*
+!node-red/data/flows.json

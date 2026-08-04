@@ -1,0 +1,280 @@
+[
+    {
+        "id": "9b396b15101d0636",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "f7389e604d5fcd76",
+        "type": "mqtt-broker",
+        "name": "Licht topic",
+        "broker": "mosquitto",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e337a7407d11e689",
+        "type": "mqtt in",
+        "z": "9b396b15101d0636",
+        "name": "",
+        "topic": "sensor/distance",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "f7389e604d5fcd76",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 120,
+        "y": 140,
+        "wires": [
+            [
+                "2b333584fc7b2a1e"
+            ]
+        ]
+    },
+    {
+        "id": "7a5401c194dc6aed",
+        "type": "mqtt in",
+        "z": "9b396b15101d0636",
+        "name": "",
+        "topic": "sensor/light",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "f7389e604d5fcd76",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 110,
+        "y": 240,
+        "wires": [
+            [
+                "bc6bfb9bb4e6430e"
+            ]
+        ]
+    },
+    {
+        "id": "2b333584fc7b2a1e",
+        "type": "function",
+        "z": "9b396b15101d0636",
+        "name": "Valideer afstand",
+        "func": "// msg.payload kan al een object zijn (auto-detect), of nog tekst -- we vangen beide op\nlet data = msg.payload;\nif (typeof data === \"string\") {\n    data = JSON.parse(data);\n}\n\n// enkel afstanden tussen 0 en 400 cm zijn geldig (meetbereik van de sensor)\nif (data.distance_cm >= 0 && data.distance_cm <= 400) {\n    msg.payload = data;\n    return [msg, null];   // uitgang 1: geldige meting\n} else {\n    return [null, msg];   // uitgang 2: ongeldige meting\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 140,
+        "wires": [
+            [
+                "d984a17082731717",
+                "942f82e4e385453a"
+            ],
+            [
+                "6b6ff521655f2923"
+            ]
+        ]
+    },
+    {
+        "id": "d984a17082731717",
+        "type": "debug",
+        "z": "9b396b15101d0636",
+        "name": "Geldige afstand",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 620,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6b6ff521655f2923",
+        "type": "debug",
+        "z": "9b396b15101d0636",
+        "name": "Ongeldige afstand",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "bc6bfb9bb4e6430e",
+        "type": "function",
+        "z": "9b396b15101d0636",
+        "name": "Valideer licht",
+        "func": "// msg.payload kan al een object zijn (auto-detect), of nog tekst -- we vangen beide op\nlet data = msg.payload;\nif (typeof data === \"string\") {\n    data = JSON.parse(data);\n}\n\n// enkel lichtsterktes tussen 0 en 1000 lux zijn geldig (negatief kan fysiek niet)\nif (data.lux >= 0 && data.lux <= 1000) {\n    msg.payload = data;\n    return [msg, null];   // uitgang 1: geldige meting\n} else {\n    return [null, msg];   // uitgang 2: ongeldige meting\n}",
+        "outputs": 2,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "c2d6e02d48f5b66b",
+                "9245efc5def66b49"
+            ],
+            [
+                "f9700ac775d54460"
+            ]
+        ]
+    },
+    {
+        "id": "c2d6e02d48f5b66b",
+        "type": "debug",
+        "z": "9b396b15101d0636",
+        "name": "Geldig licht",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 630,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "f9700ac775d54460",
+        "type": "debug",
+        "z": "9b396b15101d0636",
+        "name": "Ongeldig licht",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 640,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "942f82e4e385453a",
+        "type": "function",
+        "z": "9b396b15101d0636",
+        "name": "Naar InfluxDB (afstand)",
+        "func": "// bouw de tekstregel die InfluxDB verwacht: meting,tag veld=waarde\nmsg.payload = `distance,source=sensor distance_cm=${msg.payload.distance_cm}`;\n\n// waar en met welke sleutel we mogen schrijven, komt uit environment variabelen\n// (ingesteld in docker-compose.yml, niet hardcoded hier)\nmsg.url = `${env.get(\"INFLUX_URL\")}/api/v2/write?org=${env.get(\"INFLUX_ORG\")}&bucket=${env.get(\"INFLUX_BUCKET\")}&precision=s`;\nmsg.headers = {\n    \"Authorization\": `Token ${env.get(\"INFLUX_TOKEN\")}`,\n    \"Content-Type\": \"text/plain; charset=utf-8\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 670,
+        "y": 40,
+        "wires": [
+            [
+                "f8bf44d990a38936"
+            ]
+        ]
+    },
+    {
+        "id": "9245efc5def66b49",
+        "type": "function",
+        "z": "9b396b15101d0636",
+        "name": "Naar InfluxDB (licht)",
+        "func": "// bouw de tekstregel die InfluxDB verwacht: meting,tag veld=waarde\nmsg.payload = `light,source=sensor lux=${msg.payload.lux}`;\n\n// waar en met welke sleutel we mogen schrijven, komt uit environment variabelen\nmsg.url = `${env.get(\"INFLUX_URL\")}/api/v2/write?org=${env.get(\"INFLUX_ORG\")}&bucket=${env.get(\"INFLUX_BUCKET\")}&precision=s`;\nmsg.headers = {\n    \"Authorization\": `Token ${env.get(\"INFLUX_TOKEN\")}`,\n    \"Content-Type\": \"text/plain; charset=utf-8\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 660,
+        "y": 220,
+        "wires": [
+            [
+                "f8bf44d990a38936"
+            ]
+        ]
+    },
+    {
+        "id": "f8bf44d990a38936",
+        "type": "http request",
+        "z": "9b396b15101d0636",
+        "name": "Schrijf naar InfluxDB",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 920,
+        "y": 200,
+        "wires": [
+            [
+                "3a7b336ddeb9be6e"
+            ]
+        ]
+    },
+    {
+        "id": "3a7b336ddeb9be6e",
+        "type": "debug",
+        "z": "9b396b15101d0636",
+        "name": "InfluxDB response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1150,
+        "y": 200,
+        "wires": []
+    }
+]

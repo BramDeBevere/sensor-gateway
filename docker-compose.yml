@@ -15,7 +15,7 @@ services:
   simulator:
     build:
       context: ./simulator
-    image: sensor-gateway-simulator:latest
+    image: ghcr.io/bramdebevere/sensor-gateway-simulator:latest
     container_name: sensor-simulator
     restart: unless-stopped
     depends_on:

@@ -5,3 +5,6 @@
 # node-modules) -- we willen enkel onze eigen flow (flows.json) bijhouden in Git
 node-red/data/*
 !node-red/data/flows.json
+
+# backups zelf horen niet in Git, enkel het script dat ze maakt
+backups/

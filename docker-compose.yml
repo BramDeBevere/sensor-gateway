@@ -16,6 +16,8 @@ services:
     build:
       context: ./simulator
     image: ghcr.io/bramdebevere/sensor-gateway-simulator:latest
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
     container_name: sensor-simulator
     restart: unless-stopped
     depends_on:
@@ -77,6 +79,20 @@ services:
       - portainer-data:/data
     networks:
       - gateway-net
+
+  watchtower:
+    image: nickfedor/watchtower
+    container_name: watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      WATCHTOWER_LABEL_ENABLE: "true"
+      WATCHTOWER_POLL_INTERVAL: "300"
+      WATCHTOWER_CLEANUP: "true"
+    networks:
+      - gateway-net
+
 
 networks:
   gateway-net:

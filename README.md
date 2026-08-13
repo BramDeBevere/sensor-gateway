@@ -174,6 +174,28 @@ command line te moeten checken.
 └── REFLECTIE.md
 ```
 
+## Bonus: automatische updates met Watchtower
+
+Watchtower monitort periodiek (elke 5 minuten) of er een nieuwe versie van
+het simulator-image beschikbaar is op GHCR, en herstart de container
+automatisch zodra dat het geval is — dankzij het label
+`com.centurylinklabs.watchtower.enable=true` op de `simulator`-service kijkt
+Watchtower **enkel** naar die ene container, niet naar de rest van de stack.
+
+Dit maakt de keten volledig automatisch: code pushen → GitHub Actions bouwt
+en publiceert het image → Watchtower merkt dit op en herstart de simulator,
+zonder dat `deploy.sh` manueel gedraaid moet worden.
+
+> Let op: gebruik het image `nickfedor/watchtower`, niet het originele
+> `containrrr/watchtower` — dat laatste is sinds december 2025 gearchiveerd
+> en niet meer compatibel met recente Docker-versies.
+
+## Bonus: backup-script
+
+`./backup.sh` maakt een tijdgestempelde backup van alle InfluxDB-data via
+het ingebouwde `influx backup`-commando, en kopieert die van in de container
+naar de VM zelf — zo overleeft de backup ook een `docker compose down -v`.
+
 ## Evaluatiecriteria: waar terug te vinden
 
 | Criterium | Waar |

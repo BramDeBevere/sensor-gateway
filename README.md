@@ -6,6 +6,28 @@ Gemaakt door Bram De Bevere, Vives.
 
 ## Hoe het in elkaar zit
 
+```
+DATAFLOW
+
+  Simulator --> Mosquitto --> Node-RED --> InfluxDB --> Dashboard
+   (MQTT)        (broker)    (validatie)    (opslag)
+
+  Node-RED houdt enkel geldige metingen over.
+  Ongeldige metingen gaan naar een debug-log, niet naar de databank.
+
+
+BEHEER
+
+  Portainer    Toont het overzicht van alle containers.
+  Watchtower   Controleert om de 5 minuten op een nieuwe simulator-versie.
+               en herstart de container automatisch.
+
+
+CI/CD
+
+  git push --> GitHub Actions (lint + build) --> GHCR --> Watchtower pullt het vanzelf
+```
+
 De simulator (een klein Node.js-scriptje) doet zich voor als een controller met een afstandssensor en een lichtsensor. Elke seconde stuurt hij een meting naar de MQTT-broker (Mosquitto), op twee aparte topics: `sensor/distance` (afstand in cm) en `sensor/light` (lichtsterkte in lux). Bewust genereert hij in ongeveer 5% van de gevallen een onmogelijke waarde, zoals een negatieve afstand, zodat er ook echt iets te valideren valt.
 
 Node-RED luistert op beide topics en checkt elke meting in een zelfgeschreven function node: afstand moet tussen 0 en 400 cm liggen, licht tussen 0 en 1000 lux. Alles wat binnen dat bereik valt, wordt weggeschreven naar InfluxDB via de HTTP write-API. Alles wat erbuiten valt, verdwijnt niet zomaar, maar wordt gelogd in een debug-node zodat je kan zien dat de filtering effectief werkt.

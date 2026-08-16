@@ -1,0 +1,101 @@
+apiVersion: influxdata.com/v2alpha1
+kind: Dashboard
+metadata:
+  name: sensor-gateway-dashboard
+spec:
+  name: Sensor Gateway
+  charts:
+    - kind: Gauge
+      name: Live afstand
+      xPos: 0
+      yPos: 0
+      width: 3
+      height: 3
+      decimalPlaces: 0
+      colors:
+        - type: min
+          hex: '#00C9FF'
+          name: laag
+          value: 0
+        - type: max
+          hex: '#9394FF'
+          name: hoog
+          value: 400
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -30s)
+              |> filter(fn: (r) => r._measurement == "distance")
+    - kind: Gauge
+      name: Live licht
+      xPos: 3
+      yPos: 0
+      width: 3
+      height: 3
+      decimalPlaces: 0
+      colors:
+        - type: min
+          hex: '#00C9FF'
+          name: laag
+          value: 0
+        - type: max
+          hex: '#9394FF'
+          name: hoog
+          value: 1000
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -30s)
+              |> filter(fn: (r) => r._measurement == "light")
+    - kind: Single_Stat
+      name: Afstand gemiddelde 1u
+      xPos: 0
+      yPos: 3
+      width: 3
+      height: 2
+      decimalPlaces: 1
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -1h)
+              |> filter(fn: (r) => r._measurement == "distance")
+              |> mean()
+    - kind: Single_Stat
+      name: Afstand gemiddelde 24u
+      xPos: 3
+      yPos: 3
+      width: 3
+      height: 2
+      decimalPlaces: 1
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -24h)
+              |> filter(fn: (r) => r._measurement == "distance")
+              |> mean()
+    - kind: Single_Stat
+      name: Licht gemiddelde 1u
+      xPos: 6
+      yPos: 3
+      width: 3
+      height: 2
+      decimalPlaces: 1
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -1h)
+              |> filter(fn: (r) => r._measurement == "light")
+              |> mean()
+    - kind: Single_Stat
+      name: Licht gemiddelde 24u
+      xPos: 9
+      yPos: 3
+      width: 3
+      height: 2
+      decimalPlaces: 1
+      queries:
+        - query: |-
+            from(bucket: "sensors")
+              |> range(start: -24h)
+              |> filter(fn: (r) => r._measurement == "light")
+              |> mean()

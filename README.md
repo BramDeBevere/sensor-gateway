@@ -139,6 +139,5 @@ Het script bouwt of pullt, stopt de draaiende containers, en start de stack opni
 ├── simulator/              Dockerfile + Node.js MQTT-publisher, eigen image op GHCR
 ├── node-red/data/          flows.json wordt automatisch geladen bij opstarten
 ├── .github/workflows/ci.yml
-├── screenshots/
 └── REFLECTIE.md
 ```

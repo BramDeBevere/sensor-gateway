@@ -68,6 +68,22 @@ services:
     networks:
       - gateway-net
 
+  influx-init:
+    image: influxdb:2.7
+    container_name: influx-init
+    depends_on:
+      - influxdb
+    restart: "no"
+    environment:
+      INFLUX_ORG: ${INFLUX_ORG}
+      INFLUX_TOKEN: ${INFLUX_TOKEN}
+    volumes:
+      - ./influx/dashboard-template.yml:/template.yml:ro
+      - ./influx/init-dashboard.sh:/init-dashboard.sh:ro
+    networks:
+      - gateway-net
+    entrypoint: ["sh", "/init-dashboard.sh"]
+
   portainer:
     image: portainer/portainer-ce:2.20.3
     container_name: portainer

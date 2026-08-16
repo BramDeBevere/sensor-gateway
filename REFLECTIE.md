@@ -17,7 +17,7 @@ documentatie) zelfstandig opgezet.
   te bouwen en te publiceren werkte uiteindelijk vlot, met "compose up" en
   "compose up --build" allebei getest en werkend.
 
-## Wat was moeilijk / waar liepen we tegenaan?
+## Wat was moeilijk?
 
 - Eerste keer met VirtualBox-netwerkconfiguratie: Bridged Adapter werkte niet
   op een mobiele hotspot (client isolation), overgeschakeld naar NAT met

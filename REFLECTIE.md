@@ -39,6 +39,6 @@ documentatie) zelfstandig opgezet.
 
 - Sneller de ingebouwde validatietools gebruiken (`docker compose config`,
   `git status` na elke wijziging) in plaats van pas achteraf te ontdekken
-  dat een bestand niet correct gestaged of opgeslagen was.
+  dat een bestand niet correct opgeslagen was.
 - Van bij het begin een `.gitignore` en `.env.example` aanmaken, in plaats
   van dat pas te doen vlak voor de eerste push.
